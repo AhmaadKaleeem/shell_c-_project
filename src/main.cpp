@@ -68,7 +68,7 @@ public:
       cout << command << " is a shell builtin\n";
     }
     else {
-         cout << command << ": command not found\n";
+         cout << command << ": not found\n";
     }
     
   }
