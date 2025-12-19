@@ -28,14 +28,21 @@ public:
   }
 
  }
-};
-int main() {
-  CommandHandler handler;
-  string user_command;
-  cout << unitbuf;
-  cerr << unitbuf;
+ 
+ void repl(){
+ while (true){
+   string user_command;
+  
   cout << "$ " ;
   getline (cin,user_command);
-  handler.execute(user_command);
+  execute(user_command);
+ }
+ }
+};
+
+int main() {
+  CommandHandler handler;
+ handler.repl();
+ 
 
 }
