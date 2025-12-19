@@ -21,7 +21,7 @@ public:
 
  void execute(const string command){
   if (!is_valid(command) ){
-    cout << "[Error] Unknown Command: '"<< command <<"' \n";
+    cout << command << ": command not found\n";
   }
   else {
      cout << "[Success] Executing Command: '"<< command <<"' \n";
