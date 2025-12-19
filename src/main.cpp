@@ -20,6 +20,7 @@ public:
  }
 
  void execute(const string command){
+  if (command == "exit") { return ;} // return on exit command
   if (!is_valid(command) ){
     cout << command << ": command not found\n";
   }
@@ -30,9 +31,8 @@ public:
  }
  
  void repl(){
- while (true){
    string user_command;
-  
+ while (user_command != "exit" ){
   cout << "$ " ;
   getline (cin,user_command);
   execute(user_command);
