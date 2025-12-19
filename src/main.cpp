@@ -17,7 +17,8 @@ public:
   {
     valid_commands = {
         {"echo", true},
-        {"exit", true}};
+        {"exit", true},
+        {"type", true}};
   }
   bool is_valid(const string &command)
   {
@@ -50,12 +51,26 @@ public:
     {
       execute_echo(command_input);
     }
+    else if (command_name == "type"){
+      execute_type(command_input);
+    }
   }
 
   // function to execute echo command
   void execute_echo(const string &command)
   {
     cout << command << "\n";
+  }
+  void execute_type(const string &command)
+  {
+    if (is_valid(command))
+    {
+      cout << command << " is a shell builtin\n";
+    }
+    else {
+         cout << command << ": command not found\n";
+    }
+    
   }
 
   // implemetin repl , infinte loop until user eneter exit or closes terminl
