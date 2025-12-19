@@ -30,10 +30,12 @@ public:
  }
 };
 int main() {
-  
+  CommandHandler handler;
+  string user_command;
   cout << unitbuf;
   cerr << unitbuf;
+  cout << "$ " ;
+  getline (cin,user_command);
+  handler.execute(user_command);
 
-  // TODO: Uncomment the code below to pass the first stage
-  cout << "$ ";
 }
