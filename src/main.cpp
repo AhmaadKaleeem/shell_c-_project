@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <vector>
 #include <cstdlib> // To use getenv()
+#include <unistd.h>
+#include <sys/wait.h>
 #include <sstream>
 #include <unordered_map>
 using namespace std;
@@ -45,21 +47,31 @@ public:
     }
     if (command_name == "exit")
     {
-      return false ;
+      return false;
     } // return on exit command
-    if (!is_valid_command(command_name))
+    if (is_valid_command(command_name))
     {
-      cout << command_name << ": command not found\n";
+      if (command_name == "echo")
+      {
+        execute_echo(command_input);
+      }
+      else if (command_name == "type")
+      {
+        execute_type(command_input);
+      }
     }
-    else if (command_name == "echo")
-    {
-      execute_echo(command_input);
+    else{
+       string full_path = search_in_path(command_name);
+            if (full_path.empty())
+            {
+                cout << command_name << ": command not found\n";
+            }
+            else
+            {
+                execute_external(command);
+            }
     }
-    else if (command_name == "type")
-    {
-      execute_type(command_input);
-    }
-    return true;
+      return true;
   }
 
   // function to execute echo command
@@ -88,7 +100,7 @@ public:
     }
   }
 
-  string search_in_path(string command)
+  string search_in_path(const string &command)
   {
     const char *path_env = getenv("PATH"); // path env return char*
     if (!path_env)
@@ -107,6 +119,38 @@ public:
     return "";
   }
 
+  void execute_external(const string &command)
+  {
+    stringstream ss(command);
+    vector<string> tokens;
+    string token;
+    while (ss >> token)
+    {
+      tokens.push_back(token);
+    }
+    vector<char *> args;
+    for (auto &t : tokens)
+    {
+      args.push_back(const_cast<char *>(t.c_str()));
+    }
+    args.push_back(nullptr); // to let ensure that its ending pt
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+      execvp(args[0], args.data());
+      perror("execvp");
+      exit(1);
+    }
+
+    else if (pid > 0)
+    {
+      waitpid(pid, nullptr, 0);
+    }
+    else
+    {
+      perror("fork");
+    }
+  }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
   void repl()
   {
@@ -115,7 +159,8 @@ public:
     {
       cout << "$ ";
       getline(cin, user_command);
-      if(!execute(user_command)) break; // exit case
+      if (!execute(user_command))
+        break; // exit case
     }
   }
 
