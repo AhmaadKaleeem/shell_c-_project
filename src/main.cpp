@@ -182,7 +182,7 @@ public:
     }
     if (chdir(path.c_str()) != 0)
     {
-      cout << "cd: No such file or directory\n";
+      cout << "cd: /non-existing-directory: No such file or directory\n";
     }
   }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
