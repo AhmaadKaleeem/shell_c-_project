@@ -156,9 +156,10 @@ public:
   }
   }
 
-  void execute_cd(const stirng& command){
+  void execute_cd(const string& command){
     if (command.empty() || command == "~"){
-        path = getenv("HOME");
+       string path = getenv("HOME");
+        if(!path) path = "/";
         chdir(path.c_str());
     }
     if(chdir(path.c_str()) != 0){
