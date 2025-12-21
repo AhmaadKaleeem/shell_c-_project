@@ -158,6 +158,7 @@ public:
   }
 
   void execute_cd(const string& command){
+    string home;
     if (command.empty() || command == "~"){
       const char* path = getenv("HOME");
         if(!path) {path = "/";}
