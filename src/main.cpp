@@ -24,8 +24,11 @@ public:
     valid_commands = {
         {"echo", true},
         {"exit", true},
-        {"type", true}};
+        {"type", true},
+        {"pwd",true}
+    };
   }
+
   bool is_valid_command(const string &command)
   {
     if (valid_commands.count(command) > 0)
@@ -33,6 +36,7 @@ public:
     else
       return false;
   }
+
   // function to execute a command
   bool execute(const string &command)
   {
@@ -59,19 +63,23 @@ public:
       {
         execute_type(command_input);
       }
+      else if (command_name == "pwd"){
+        execute_pwd();
+      }
     }
-    else{
-       string full_path = search_in_path(command_name);
-            if (full_path.empty())
-            {
-                cout << command_name << ": command not found\n";
-            }
-            else
-            {
-                execute_external(command);
-            }
+    else
+    {
+      string full_path = search_in_path(command_name);
+      if (full_path.empty())
+      {
+        cout << command_name << ": command not found\n";
+      }
+      else
+      {
+        execute_external(command);
+      }
     }
-      return true;
+    return true;
   }
 
   // function to execute echo command
@@ -79,6 +87,7 @@ public:
   {
     cout << command << "\n";
   }
+
   void execute_type(const string &command)
   {
     if (is_valid_command(command))
@@ -98,25 +107,6 @@ public:
         cout << command << " is " << full_path << endl;
       }
     }
-  }
-
-  string search_in_path(const string &command)
-  {
-    const char *path_env = getenv("PATH"); // path env return char*
-    if (!path_env)
-      return "";
-    string path_str(path_env); // convertin to string
-    stringstream ss(path_str);
-    string directory;
-    while (getline(ss, directory, ':'))
-    {
-      string full_path = directory + "/" + command;
-      if (check_file_execute(full_path))
-      {
-        return full_path;
-      }
-    }
-    return "";
   }
 
   void execute_external(const string &command)
@@ -151,6 +141,16 @@ public:
       perror("fork");
     }
   }
+
+  void execute_pwd(){
+  char curr_dir[PATH_MAX];
+  if(getcwd(curr_dir,sizeof(curr_dir))!= nullptr){
+    cout << curr_dir << "\n";
+  }
+  else{
+    perror(getcwd);
+  }
+  }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
   void repl()
   {
@@ -162,6 +162,25 @@ public:
       if (!execute(user_command))
         break; // exit case
     }
+  }
+
+  string search_in_path(const string &command)
+  {
+    const char *path_env = getenv("PATH"); // path env return char*
+    if (!path_env)
+      return "";
+    string path_str(path_env); // convertin to string
+    stringstream ss(path_str);
+    string directory;
+    while (getline(ss, directory, ':'))
+    {
+      string full_path = directory + "/" + command;
+      if (check_file_execute(full_path))
+      {
+        return full_path;
+      }
+    }
+    return "";
   }
 
   // checking for file and executable permisiion
