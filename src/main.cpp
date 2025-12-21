@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-#include <limits.h>
 #include <vector>
 #include <cstdlib> // To use getenv()
 #include <unistd.h>
@@ -26,6 +25,7 @@ public:
         {"echo", true},
         {"exit", true},
         {"type", true},
+        {"cd", true},
         {"pwd",true}
     };
   }
@@ -66,6 +66,9 @@ public:
       }
       else if (command_name == "pwd"){
         execute_pwd();
+      }
+      else if(command_name == "cd"){
+        execute_cd(command_input);
       }
     }
     else
@@ -151,6 +154,16 @@ public:
   else{
     perror("getcwd");
   }
+  }
+
+  void execute_cd(const stirng& command){
+    if (command.empty() || command == "~"){
+        path = getenv("HOME");
+        chdir(path.c_str());
+    }
+    if(chdir(path.c_str()) != 0){
+        perror("cd");
+    }
   }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
   void repl()
