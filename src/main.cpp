@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <limits.h>
 #include <vector>
 #include <cstdlib> // To use getenv()
 #include <unistd.h>
