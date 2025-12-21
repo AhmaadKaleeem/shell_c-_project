@@ -163,7 +163,7 @@ public:
 
   void execute_cd(const string &command)
   {
-    string *path;
+    string path;
     if (command.empty() || command == "~")
     {
       const char *home = getenv("HOME");
