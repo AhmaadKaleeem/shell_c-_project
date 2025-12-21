@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <sstream>
 #include <unordered_map>
+#include <limits.h>
 using namespace std;
 namespace fs = filesystem;
 class CommandHandler
