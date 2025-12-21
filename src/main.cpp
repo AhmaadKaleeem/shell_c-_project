@@ -148,7 +148,7 @@ public:
     cout << curr_dir << "\n";
   }
   else{
-    perror(getcwd);
+    perror("getcwd");
   }
   }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
