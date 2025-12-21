@@ -159,10 +159,11 @@ public:
 
   void execute_cd(const string& command){
     if (command.empty() || command == "~"){
-       string path = getenv("HOME");
-        if(!path) path = "/";
-        chdir(path.c_str());
-    }
+       path = getenv("HOME");
+        if(!path) {path = "/";}
+        else {path = home;}
+      }
+        else {path = command;}
     if(chdir(path.c_str()) != 0){
         perror("cd");
     }
