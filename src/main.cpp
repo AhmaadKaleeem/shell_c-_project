@@ -27,8 +27,7 @@ public:
         {"exit", true},
         {"type", true},
         {"cd", true},
-        {"pwd",true}
-    };
+        {"pwd", true}};
   }
 
   bool is_valid_command(const string &command)
@@ -65,10 +64,12 @@ public:
       {
         execute_type(command_input);
       }
-      else if (command_name == "pwd"){
+      else if (command_name == "pwd")
+      {
         execute_pwd();
       }
-      else if(command_name == "cd"){
+      else if (command_name == "cd")
+      {
         execute_cd(command_input);
       }
     }
@@ -147,26 +148,41 @@ public:
     }
   }
 
-  void execute_pwd(){
-  char curr_dir[PATH_MAX];
-  if(getcwd(curr_dir,sizeof(curr_dir))!= nullptr){
-    cout << curr_dir << "\n";
-  }
-  else{
-    perror("getcwd");
-  }
+  void execute_pwd()
+  {
+    char curr_dir[PATH_MAX];
+    if (getcwd(curr_dir, sizeof(curr_dir)) != nullptr)
+    {
+      cout << curr_dir << "\n";
+    }
+    else
+    {
+      perror("getcwd");
+    }
   }
 
-  void execute_cd(const string& command){
-    const char* home,path;
-    if (command.empty() || command == "~"){
-      const char* path = getenv("HOME");
-        if(!path) {path = "/";}
-        else {path = home;}
+  void execute_cd(const string &command)
+  {
+    string *path;
+    if (command.empty() || command == "~")
+    {
+      const char *home = getenv("HOME");
+      if (!home)
+      {
+        path = "/";
       }
-        else {path = command;}
-    if(chdir(path.c_str()) != 0){
-        perror("cd");
+      else
+      {
+        path = home;
+      }
+    }
+    else
+    {
+      path = command;
+    }
+    if (chdir(path.c_str()) != 0)
+    {
+      perror("cd");
     }
   }
   // implemetin repl , infinte loop until user eneter exit or closes terminl
